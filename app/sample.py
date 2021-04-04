@@ -43,7 +43,7 @@ def start():
         body += "reload the question again."
 
     if game != None:
-        body = '<h1>Select 4 characters to make a question!</h1>'
+        body = '<h1>Choose 4 letters to create question</h1>'
         body += '<br></br>'
         question_text = ' '.join(game['question'])
         body += 'Question :' + question_text
@@ -55,10 +55,10 @@ def start():
         if game['index'] == 4:
             collection_game.update_one({}, {"$set": {"Mode"  : True}})
             collection_game.update_one({}, {"$set": {"index" : 0}})
-            body = '<h1>Select 4 characters to make a question!</h1>'
-            body += 'Question created! Prepare for playing'
+            body = '<h1>Choose 4 letters to create question</h1>'
+            body += 'The question has been created'
             body += '<br></br>'
-            body += '<a href="/playtime/"><button> Press to go</button></a>'
+            body += '<a href="/playing/"><button> play </button></a>'
             return body
     return body
 
@@ -76,19 +76,33 @@ def routeA():
 @application.route('/B/')
 def routeB():
     game = collection_game.find_one()
-    ans_or_quest(game["Mode"], game, 'B')
-    return 0
+    if game["Mode"] == False :
+        ans_or_quest(game["Mode"],game,'B')
+        return start()
+    if game["Mode"] == True :
+        ans_or_quest(game["Mode"],game,'B')
+        return play()
+
 @application.route('/C/')
 def routeC():
     game = collection_game.find_one()
-    ans_or_quest(game["Mode"], game, 'C')
-    return 0
+    if game["Mode"] == False :
+        ans_or_quest(game["Mode"],game,'C')
+        return start()
+    if game["Mode"] == True :
+        ans_or_quest(game["Mode"],game,'C')
+        return play()
+
 
 @application.route('/D/')
 def routeD():
     game = collection_game.find_one()
-    ans_or_quest(game["Mode"], game, 'D')
-    return 0
+    if game["Mode"] == False :
+        ans_or_quest(game["Mode"],game,'D')
+        return start()
+    if game["Mode"] == True :
+        ans_or_quest(game["Mode"],game,'D')
+        return play()
 
 def ans_or_quest(type, game, alphabet):
     if type == False:
@@ -110,7 +124,7 @@ def ans_or_quest(type, game, alphabet):
 
 
 
-@application.route('/playtime/')
+@application.route('/playing/')
 def play():
     collection_game = db.game
     game = collection_game.find_one()
@@ -119,7 +133,7 @@ def play():
     ans_text = ' '.join(game['answer'])
     char_remain_text = ' '.join(game['char_remain'])
     body = '<h2>Alphabet Guessing Game V.1.0</h2>'
-    body += "Please Choose A or B or C or D to guess."
+    body += "Guessing by choose A or B or C or D ."
     body += '<br> <br> '
     body += 'Answer: ' + ans_text
     body += '<br>'
@@ -130,7 +144,7 @@ def play():
     body += '<a href="/C"><button> C </button></a>'
     body += '<a href="/D"><button> D </button></a>'
     body += '<br> <br>'
-    body += 'Your miss answer: ' + str(game["wrong_number"])
+    body += 'Wrong answer : ' + str(game["wrong_number"])
     return body
 
 
