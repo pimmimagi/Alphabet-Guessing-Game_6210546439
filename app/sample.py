@@ -129,7 +129,7 @@ def play():
     collection_game = db.game
     game = collection_game.find_one()
     if game['question'] == game['answer']:
-        return gameover()
+        return end()
     ans_text = ' '.join(game['answer'])
     char_remain_text = ' '.join(game['char_remain'])
     body = '<h2>Alphabet Guessing Game V.1.0</h2>'
@@ -150,8 +150,8 @@ def play():
 
 
 
-@application.route('/gameover')
-def gameover():
+@application.route('/Game_over')
+def end():
     collection_game = db.game
     game = collection_game.find_one()
     body = '<h2>Congratulations!!! </h2>'
@@ -159,11 +159,11 @@ def gameover():
     body += '<br> <br> '
     body += '<b>Number of wrong answer: </b>' + str(game['wrong_number'])
     body += '<br> <br>'
-    body += '<a href="/again"><button> Play again! </button></a>'
+    body += '<a href="/playagain"><button> Play again </button></a>'
     return body
 
-@application.route('/again')
-def again():
+@application.route('/playagain')
+def playagain():
     collection_game = db.game
     mydict = {
         "question": ["_","_","_","_"],
